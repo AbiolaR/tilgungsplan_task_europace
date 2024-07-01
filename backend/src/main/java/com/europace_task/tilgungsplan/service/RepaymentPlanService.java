@@ -33,6 +33,9 @@ public class RepaymentPlanService {
                 repaymentPlanInput.getInitialRepaymentPercent());
 
         for (int i = 1; i <= amountOfMonths; i++) {
+            if (repaymentPlan.getResidualDebt().compareTo(BigDecimal.ZERO) == 0) {
+                return repaymentPlan;
+            }
             createEntry(repaymentPlan, startDate.plusMonths(i), repaymentPlanInput.getShouldInterest(), repaymentRate);
         }
 
@@ -48,6 +51,12 @@ public class RepaymentPlanService {
     private void createEntry(RepaymentPlan repaymentPlan, LocalDate entryDate, BigDecimal interestPercentage, BigDecimal repaymentRate) {
         BigDecimal interest = calculateMonthlyInterest(repaymentPlan.getResidualDebt().abs(), interestPercentage);
         BigDecimal repayment = repaymentRate.subtract(interest);
+
+        // if future residual debt is greater than 0
+        if (repaymentPlan.getResidualDebt().add(repayment).compareTo(BigDecimal.ZERO) > 0) {
+            repayment = BigDecimal.ZERO.subtract(repaymentPlan.getResidualDebt()).subtract(interest);
+            repaymentRate = repayment.add(interest);
+        }
 
         insertEntry(repaymentPlan, entryDate, interest, repayment, repaymentRate);
     }

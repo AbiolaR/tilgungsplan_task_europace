@@ -38,4 +38,29 @@ class RepaymentPlanServiceTest {
         assertEquals(totalRepayment, repaymentPlan.getTotalRepayment());
         assertEquals(totalRepaymentRate, repaymentPlan.getTotalRepaymentRate());
     }
+
+    @Test
+    void generateRepaymentPlan_fullyPaidOff() {
+        RepaymentPlanService repaymentPlanService = new RepaymentPlanService();
+
+        // Defined input values
+        final BigDecimal loanAmount = BigDecimal.valueOf(100000).setScale(2, RoundingMode.HALF_EVEN);
+        final BigDecimal shouldInterest = BigDecimal.valueOf(20.12);
+        final BigDecimal initialRepaymentPercent = BigDecimal.valueOf(20);
+        final int interestRateFixation = 10;
+
+        // Expected output values
+        final int amountOfMonthsInTenYears = 121;
+        final BigDecimal residualDebt = BigDecimal.ZERO.setScale(2, RoundingMode.HALF_EVEN);
+
+        RepaymentPlanInput repaymentPlanInput = new RepaymentPlanInput(loanAmount, shouldInterest, initialRepaymentPercent, interestRateFixation);
+
+        RepaymentPlan repaymentPlan = repaymentPlanService.generateRepaymentPlan(repaymentPlanInput);
+
+        assertTrue(amountOfMonthsInTenYears > repaymentPlan.getRepaymentPlanEntries().size());
+        assertEquals(residualDebt, repaymentPlan.getResidualDebt());
+        assertEquals(loanAmount, repaymentPlan.getTotalRepayment());
+        assertEquals(repaymentPlan.getTotalInterest().add(repaymentPlan.getTotalRepayment()),
+                repaymentPlan.getTotalRepaymentRate());
+    }
 }
