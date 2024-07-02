@@ -14,7 +14,7 @@ public class RepaymentPlanController {
         this.repaymentPlanService = repaymentPlanService;
     }
 
-    @CrossOrigin(origins = "http://localhost:/4200")
+    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping(path = {"generate", "generate/"})
     RepaymentPlan generateRepaymentPlan(@RequestBody RepaymentPlanInput repaymentPlanInput) {
         return repaymentPlanService.generateRepaymentPlan(repaymentPlanInput);

@@ -20,7 +20,7 @@ public class RepaymentPlanService {
     public RepaymentPlan generateRepaymentPlan(RepaymentPlanInput repaymentPlanInput) {
         repaymentPlanInput = sanitizedRepaymentPlanInput(repaymentPlanInput);
 
-        BigDecimal initialDebt = repaymentPlanInput.getLoanAmount().negate();
+        BigDecimal initialDebt = repaymentPlanInput.getLoanAmount().negate().setScale(2, RoundingMode.HALF_EVEN);
         RepaymentPlan repaymentPlan = new RepaymentPlan(initialDebt, repaymentPlanInput);
 
         if (repaymentPlanInput.getInterestRateFixation() == 0) {
@@ -32,8 +32,8 @@ public class RepaymentPlanService {
 
         long amountOfMonths = ChronoUnit.MONTHS.between(YearMonth.now(), endMonth);
 
-        RepaymentPlanEntry initialRepayment = new RepaymentPlanEntry(startDate, initialDebt, BigDecimal.ZERO,
-                initialDebt, initialDebt);
+        RepaymentPlanEntry initialRepayment = new RepaymentPlanEntry(startDate, initialDebt,
+                BigDecimal.ZERO.setScale(2, RoundingMode.HALF_EVEN), initialDebt, initialDebt);
         repaymentPlan.getRepaymentPlanEntries().add(initialRepayment);
 
         BigDecimal repaymentRate = calculateRate(initialDebt, repaymentPlanInput.getShouldInterest(),
