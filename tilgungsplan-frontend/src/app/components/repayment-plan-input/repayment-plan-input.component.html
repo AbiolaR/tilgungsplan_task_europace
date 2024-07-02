@@ -1,0 +1,33 @@
+<section class="input-fields">
+    <mat-form-field appearance="outline">
+        <mat-label>Darlehensbetrag (€)</mat-label>
+        <input matInput 
+            [(ngModel)]="repaymentPlanInput.loanAmount" 
+            (keydown)="possiblySubmit($event)"
+            twoDecimalNumber />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Sollzins (%)</mat-label>
+        <input matInput 
+            [(ngModel)]="repaymentPlanInput.shouldInterest" 
+            (keydown)="possiblySubmit($event)"
+            twoDecimalPercentage />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>anfängliche Tilgung (%)</mat-label>
+        <input matInput 
+            [(ngModel)]="repaymentPlanInput.initialRepaymentPercent"
+            (keydown)="possiblySubmit($event)"
+            twoDecimalPercentage />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Zinsbindung (Jahre)</mat-label>
+        <input matInput 
+            [(ngModel)]="repaymentPlanInput.interestRateFixation"
+            (keydown)="possiblySubmit($event)"
+            minZeroNumber />
+    </mat-form-field>
+    <button mat-flat-button (click)="generateRepaymentPlan()" color="primary" [disabled]="!inputValid()">
+        Tilgungsplan erstellen
+    </button>
+</section>
