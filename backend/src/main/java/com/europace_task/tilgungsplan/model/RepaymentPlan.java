@@ -10,6 +10,7 @@ import java.util.List;
 
 @Data
 public class RepaymentPlan {
+    private RepaymentPlanInput repaymentPlanInput;
     private BigDecimal residualDebt; // Restschuld
     private BigDecimal totalInterest = BigDecimal.ZERO; // Gesamt Zinsen
     private BigDecimal totalRepayment = BigDecimal.ZERO; // Gesamt Tilgung
@@ -18,7 +19,8 @@ public class RepaymentPlan {
     @Setter(AccessLevel.NONE)
     private final List<RepaymentPlanEntry> repaymentPlanEntries = new ArrayList<>(); // Tilgungsplaneintrag
 
-    public RepaymentPlan(BigDecimal initialDebt) {
+    public RepaymentPlan(BigDecimal initialDebt, RepaymentPlanInput repaymentPlanInput) {
         this.residualDebt = initialDebt;
+        this.repaymentPlanInput = repaymentPlanInput;
     }
 }
